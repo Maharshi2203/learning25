@@ -1,16 +1,85 @@
-# React + Vite
+🚀 Daily MERN Stack Learning Routine
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository documents my day-by-day journey of learning the MERN stack by building, experimenting, and practicing real-world features using MongoDB, Express.js, React.js, and Node.js.
 
-Currently, two official plugins are available:
+The goal of this repo is consistency + hands-on learning — every day includes practical tasks, mini-features, or concepts implemented through code.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🧠 What This Repository Contains
 
-## React Compiler
+📆 Daily MERN stack practice tasks
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+⚛️ React fundamentals & advanced concepts
 
-## Expanding the ESLint configuration
+🟢 Node.js & Express REST APIs
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🍃 MongoDB & Mongoose operations
+
+🔐 Authentication & Authorization
+
+🔄 CRUD operations
+
+🧪 Experiments, mistakes, and fixes
+
+🛠️ Mini-features & real-world logic
+
+Each Day-XX folder represents what I learned and built on that day.
+
+🛠️ Tech Stack
+
+Frontend: React.js, HTML, CSS, JavaScript
+
+Backend: Node.js, Express.js
+
+Database: MongoDB, Mongoose
+
+Tools: Git, GitHub, Postman, VS Code
+
+🎯 Learning Objectives
+
+Understand full-stack web development
+
+Build RESTful APIs
+
+Connect frontend with backend
+
+Write clean, scalable code
+
+Follow best practices used in real projects
+
+Prepare for internships & placements
+
+📈 Progress Philosophy
+
+Learn • Build • Break • Fix • Repeat
+
+This repository is not about perfection — it’s about daily improvement.
+
+🧑‍💻 Author
+
+Maharshi Mehta
+🎓 Computer Science Student
+💻 MERN Stack Learner
+
+⭐ How to Use This Repo
+
+Browse day-wise folders
+
+Read notes before code
+
+Run projects locally
+
+Modify & experiment freely
+
+🚀 Future Plans
+
+Full authentication system
+
+Role-based access control
+
+Real-world mini projects
+
+Deployment with cloud services
+
+Production-level MERN apps
+
+⭐ If you find this repo helpful, don’t forget to star it!
