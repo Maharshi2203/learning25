@@ -33,6 +33,8 @@ import { Products } from './Components/Products'
 import { DepedentDropdown } from './Components/input/DependentDropDown'
 import { FormDemo } from './Components/Form/FormDemo'
 import { FormDemo2 } from './Components/Form/FormDemo2'
+import { FormDemo3 } from './Components/Form/FormDemo3'
+import { FormDemo4 } from './Components/Form/FromDemo4'
 
 function App() {
   return (
@@ -59,6 +61,8 @@ function App() {
                   <Route path='/dropdown' element={<DepedentDropdown></DepedentDropdown>}></Route>
                   <Route path='/formdemo' element={<FormDemo></FormDemo>}></Route>
                   <Route path='/formdemo2' element={<FormDemo2></FormDemo2>}></Route>
+                  <Route path='/formdemo3' element={<FormDemo3></FormDemo3>}></Route>
+                  <Route path='/formdemo4' element={<FormDemo4></FormDemo4>}></Route>
                   <Route path='/*' element={<ErrorComponent></ErrorComponent>}></Route>
               </Routes>
       </div>
