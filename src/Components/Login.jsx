@@ -1,56 +1,149 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addUser } from "../Redux/userSlice";
 
 export const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const onSubmit = (data) => {
-    console.log("Login Data:", data);
-    // Simulating login
-    if (data.email === "admin@gmail.com" && data.password === "admin123") {
-      toast.success("Login Successful!");
-      navigate("/");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (email && password) {
+      // Create a simple user object to add to the API as requested previously
+      // Using email as name and a default age since these fields are expected by the API
+      const userData = {
+        name: email.split("@")[0], // Simple name from email
+        email: email,
+        age: 20, // Default age
+      };
+
+      try {
+        await dispatch(addUser(userData)).unwrap();
+        toast.success("Login successful!");
+        navigate("/reduxapidemo");
+      } catch (error) {
+        toast.error("Login failed: " + error);
+      }
     } else {
-      toast.error("Invalid Credentials!");
+      toast.error("Please enter email and password");
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="card p-4 shadow-lg" style={{ width: "400px", borderRadius: "15px" }}>
-        <h2 className="text-center mb-4 text-primary">Welcome Back</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-3">
-            <label className="form-label">Email Address</label>
+    <div className="login-container">
+      <div className="login-card">
+        <h1 className="login-title">Welcome Back</h1>
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label>Email Address</label>
             <input
               type="email"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`}
               placeholder="name@example.com"
-              {...register("email", { required: "Email is required" })}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
-            {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
           </div>
-          <div className="mb-3">
-            <label className="form-label">Password</label>
+          <div className="form-group">
+            <label>Password</label>
             <input
               type="password"
-              className={`form-control ${errors.password ? "is-invalid" : ""}`}
               placeholder="Enter your password"
-              {...register("password", { required: "Password is required" })}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
-            {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
           </div>
-          <button type="submit" className="btn btn-primary w-100 py-2 mt-2 shadow-sm">
-            Login
-          </button>
+          <button type="submit" className="login-button">Login</button>
         </form>
-        <div className="text-center mt-3">
-          <small className="text-muted">Don't have an account? <span className="text-primary" style={{ cursor: "pointer" }}>Sign up</span></small>
-        </div>
+        <p className="signup-text">
+          Don't have an account? <span className="signup-link">Sign up</span>
+        </p>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .login-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 80vh;
+          background-color: #f8f9fa;
+          font-family: 'Inter', sans-serif;
+        }
+        .login-card {
+          background: white;
+          padding: 40px;
+          border-radius: 16px;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+          width: 100%;
+          max-width: 450px;
+          border: 1px solid #eef0f2;
+        }
+        .login-title {
+          color: #007bff;
+          font-size: 32px;
+          font-weight: 600;
+          margin-bottom: 30px;
+          text-align: center;
+        }
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .form-group label {
+          font-size: 14px;
+          font-weight: 500;
+          color: #212529;
+        }
+        .form-group input {
+          padding: 12px 16px;
+          border: 1px solid #dee2e6;
+          border-radius: 8px;
+          font-size: 16px;
+          transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+          outline: none;
+          border-color: #007bff;
+          box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        .login-button {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 14px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          margin-top: 10px;
+        }
+        .login-button:hover {
+          background-color: #0056b3;
+        }
+        .signup-text {
+          margin-top: 24px;
+          text-align: center;
+          font-size: 14px;
+          color: #6c757d;
+        }
+        .signup-link {
+          color: #007bff;
+          font-weight: 600;
+          cursor: pointer;
+        }
+      `}} />
     </div>
   );
 };
