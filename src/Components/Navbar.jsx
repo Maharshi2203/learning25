@@ -1,10 +1,23 @@
 import React, { useContext } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { ThemeContext } from './ThemeContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { clearCart } from '../Redux/cartSlice'
+
+
 
 export const Navbar = () => {
     const {theme,settheme} = useContext(ThemeContext)
-  console.log("theme",theme)
+    const cartItems = useSelector((state) => state.cart.cartItems);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    dispatch(clearCart());
+    navigate("/login");
+  };
+
+
   const themeHandler = ()=>{
     
     if(theme=="light"){
@@ -132,11 +145,12 @@ export const Navbar = () => {
               </Link>
             </li>
             
-           {/* <li className="nav-item active">
+            <li className="nav-item active">
               <Link className="nav-link" to="/apidemo4">
                 ApiDemo4
               </Link>
-            </li> */}
+            </li>
+
             <li className="nav-item active">
               <Link className="nav-link" to="/memory">
                 Memory
@@ -154,9 +168,20 @@ export const Navbar = () => {
               </Link>
             </li>
 
-             <li class="nav-item active">
+            <li className="nav-item active">
+              <Link className="nav-link" to="/productcomponent">
+                🛒 Cart ({cartItems.length})
+              </Link>
+            </li>
+            <li className="nav-item active">
+              <button className="btn btn-danger btn-sm" onClick={logoutHandler}>Logout</button>
+            </li>
+            <li className="nav-item active">
               <button onClick={()=>{themeHandler()}}>{theme =="light"?"DARK":"LIGHT"}</button>
             </li>
+
+
+
         
           </ul>
         </div>
