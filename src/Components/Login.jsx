@@ -7,141 +7,156 @@ import { addUser } from "../Redux/userSlice";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (email && password) {
-      // Create a simple user object to add to the API as requested previously
-      // Using email as name and a default age since these fields are expected by the API
-      const userData = {
-        name: email.split("@")[0], // Simple name from email
-        email: email,
-        age: 20, // Default age
-      };
+    
+    if (!email || !password) {
+      toast.error("Please enter both email and password");
+      return;
+    }
 
-      try {
-        await dispatch(addUser(userData)).unwrap();
-        toast.success("Login successful!");
-        navigate("/reduxapidemo");
-      } catch (error) {
-        toast.error("Login failed: " + error);
-      }
-    } else {
-      toast.error("Please enter email and password");
+    setIsSubmitting(true);
+    
+    // Prepare data to be added to the API as requested
+    const userData = {
+      name: email.split("@")[0].charAt(0).toUpperCase() + email.split("@")[0].slice(1), 
+      email: email,
+      age: Math.floor(Math.random() * 20) + 20, // Random age between 20-40 for variety
+    };
+
+    try {
+      // This will add the data to the API: https://node5.onrender.com/user/user/
+      await dispatch(addUser(userData)).unwrap();
+      toast.success("Login successful! Data added to API.");
+      navigate("/reduxapidemo");
+    } catch (error) {
+      console.error("API Error:", error);
+      toast.error("Error adding data to API. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1 className="login-title">Welcome Back</h1>
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="form-group">
-            <label>Email Address</label>
+    <div className="login-wrapper">
+      <div className="login-box">
+        <div className="login-header">
+          <h2>Login</h2>
+          <p>Enter your credentials to continue</p>
+        </div>
+        
+        <form onSubmit={handleLogin} className="login-form-main">
+          <div className="input-field">
+            <label htmlFor="email">Email Address</label>
             <input
+              id="email"
               type="email"
-              placeholder="name@example.com"
+              placeholder="example@mail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={isSubmitting}
             />
           </div>
-          <div className="form-group">
-            <label>Password</label>
+          
+          <div className="input-field">
+            <label htmlFor="password">Password</label>
             <input
+              id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={isSubmitting}
             />
           </div>
-          <button type="submit" className="login-button">Login</button>
+          
+          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Processing..." : "Login"}
+          </button>
         </form>
-        <p className="signup-text">
-          Don't have an account? <span className="signup-link">Sign up</span>
-        </p>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        .login-container {
+        .login-wrapper {
           display: flex;
           justify-content: center;
           align-items: center;
-          min-height: 80vh;
-          background-color: #f8f9fa;
-          font-family: 'Inter', sans-serif;
+          height: 85vh;
+          background-color: #f0f2f5;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .login-card {
-          background: white;
-          padding: 40px;
-          border-radius: 16px;
-          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        .login-box {
+          background: #ffffff;
+          padding: 2.5rem;
+          border-radius: 12px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.05);
           width: 100%;
-          max-width: 450px;
-          border: 1px solid #eef0f2;
+          max-width: 400px;
         }
-        .login-title {
-          color: #007bff;
-          font-size: 32px;
-          font-weight: 600;
-          margin-bottom: 30px;
+        .login-header {
           text-align: center;
+          margin-bottom: 2rem;
         }
-        .login-form {
+        .login-header h2 {
+          font-size: 1.8rem;
+          color: #1a1a1a;
+          margin-bottom: 0.5rem;
+        }
+        .login-header p {
+          color: #666;
+          font-size: 0.9rem;
+        }
+        .login-form-main {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 1.2rem;
         }
-        .form-group {
+        .input-field {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 0.4rem;
         }
-        .form-group label {
-          font-size: 14px;
-          font-weight: 500;
-          color: #212529;
+        .input-field label {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #444;
         }
-        .form-group input {
-          padding: 12px 16px;
-          border: 1px solid #dee2e6;
-          border-radius: 8px;
-          font-size: 16px;
-          transition: border-color 0.2s;
+        .input-field input {
+          padding: 0.8rem;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          font-size: 1rem;
+          transition: all 0.2s ease;
         }
-        .form-group input:focus {
+        .input-field input:focus {
           outline: none;
           border-color: #007bff;
           box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
-        .login-button {
+        .submit-btn {
           background-color: #007bff;
           color: white;
           border: none;
-          padding: 14px;
-          border-radius: 8px;
-          font-size: 16px;
+          padding: 0.9rem;
+          border-radius: 6px;
+          font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
-          transition: background-color 0.2s;
-          margin-top: 10px;
+          transition: background-color 0.2s ease;
+          margin-top: 0.5rem;
         }
-        .login-button:hover {
+        .submit-btn:hover:not(:disabled) {
           background-color: #0056b3;
         }
-        .signup-text {
-          margin-top: 24px;
-          text-align: center;
-          font-size: 14px;
-          color: #6c757d;
-        }
-        .signup-link {
-          color: #007bff;
-          font-weight: 600;
-          cursor: pointer;
+        .submit-btn:disabled {
+          background-color: #a0c4ff;
+          cursor: not-allowed;
         }
       `}} />
     </div>
