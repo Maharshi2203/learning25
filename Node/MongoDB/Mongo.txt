@@ -1,0 +1,24 @@
+cmd --> mongosh
+
+to check db list
+cmd: show dbs
+
+
+db create:
+use weekendmern2
+
+NOte: until you have 1 collection(table) in db it wont show in list
+
+
+check tables:
+show collections
+
+
+how to create collection(table)
+
+SQL: create table employee(id int pk...,name varchar(30));
+NOSQL : db.createCollection("users")
+
+
+To Insert data : db.users.insertOne({name:"Raj",age:23,status:true})
+To display/find that data :  db.users.find()
