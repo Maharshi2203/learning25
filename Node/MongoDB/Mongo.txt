@@ -1,3 +1,5 @@
+===> MONGO DB
+
 cmd --> mongosh
 
 to check db list
@@ -22,3 +24,20 @@ NOSQL : db.createCollection("users")
 
 To Insert data : db.users.insertOne({name:"Raj",age:23,status:true})
 To display/find that data :  db.users.find()
+to display multiple data : db.user.insertMany({},{},{})
+
+db.users.insertMany([{name:"priya",age:24,gender:"female"},{name:"krishna",age:22,gender:"female"},{name:"arjun",age:25,gender:"male"}])
+
+
+db.users.find({name:"Maharshi"})
+
+#operators
+and- db.users.find({name:"Maharshi",age:20})
+$gt-db.users.find({age:{$gt:20}})
+$gte-db.users.find({age:{$gte:22}})
+$lt -db.users.find({age:{$lt:22}})
+$lte- db.users.find({age:{$lte:22}})
+$eq - db.users.find({age:{$eq:23}})
+$ne - db.users.find({age:{$ne:23}})
+$in - db.users.find({name:{$in:["Maharshi","raj","ram"]}})
+$nin - db.users.find({name:{$nin:["Maharshi","raj","ram"]}})
