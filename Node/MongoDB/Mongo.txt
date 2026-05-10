@@ -30,9 +30,12 @@ db.users.insertMany([{name:"priya",age:24,gender:"female"},{name:"krishna",age:2
 
 
 db.users.find({name:"Maharshi"})
+db.users.find({name:"Maharshi",age:20})
+
 
 #operators
-and- db.users.find({name:"Maharshi",age:20})
+and- db.users.find({$and:[{name:"Maharshi"},{age:20}]})
+or- db.usres.find({$or:[{name:"Maharshi"},{age:22}]})
 $gt-db.users.find({age:{$gt:20}})
 $gte-db.users.find({age:{$gte:22}})
 $lt -db.users.find({age:{$lt:22}})
@@ -41,3 +44,64 @@ $eq - db.users.find({age:{$eq:23}})
 $ne - db.users.find({age:{$ne:23}})
 $in - db.users.find({name:{$in:["Maharshi","raj","ram"]}})
 $nin - db.users.find({name:{$nin:["Maharshi","raj","ram"]}})
+
+==> limit,skip and sort
+limit()- db.users.find().limit(1)
+skip() - db.users.find().skip(2)
+
+
+nested conditions:
+db.users.find().skip(2).limit(1)
+
+sort() - db.users.find().sort({name:1}) #ASC
+db.users.find().sort({name: -1}) #dSC
+
+
+# Practice 
+
+db.createCollection("employees")
+
+db.employees.insertMany([
+  {name:"Amit",age:24,department:"HR",salary:30000,city:"Ahmedabad",status:true},
+  {name:"Raj",age:28,department:"Developer",salary:55000,city:"Surat",status:true},
+  {name:"Neha",age:26,department:"HR",salary:35000,city:"Mumbai",status:false},
+  {name:"Kunal",age:30,department:"Manager",salary:75000,city:"Pune",status:true},
+  {name:"Priya",age:22,department:"Developer",salary:40000,city:"Ahmedabad",status:true},
+  {name:"Arjun",age:27,department:"Tester",salary:32000,city:"Delhi",status:false},
+  {name:"Krishna",age:25,department:"Developer",salary:60000,city:"Ahmedabad",status:true},
+  {name:"Sneha",age:29,department:"Manager",salary:80000,city:"Mumbai",status:true},
+  {name:"Vikas",age:31,department:"Tester",salary:45000,city:"Surat",status:false},
+  {name:"Riya",age:23,department:"HR",salary:28000,city:"Pune",status:true}
+])
+
+1.Find all employees whose salary is greater than 40000.
+ans- db.employees.find({salary:{$gt:40000}})
+
+2.Find employees whose department is Developer and city is Ahmedabad.
+ans-db.employees.find({$and:[{department:"Developer"},{city:"Ahemdabad"}]})
+
+3.Find employees whose age is between 24 and 29.
+ans- db.employees.find({ age: { $gte: 24, $lte: 29 } })
+
+4.Find employees whose city is either Mumbai or Pune.
+ans - db.employees.find($or:[{city:"Mumbai"},{city:"pune"}])
+
+5.Find employees whose department is not HR.
+ans- db.employees.find({department:{$ne:HR}})
+
+6.Find employees whose status is true and salary greater than 50000.
+ans- db.employees.find({$or:[{status:true},{salary:{ $gt:50000}}]})
+
+7.Sort all employees by salary in descending order.
+ans- db.employees.find().sort({salary:1})
+
+8.Find first 3 employees after skipping 2 records.
+ans- db.employees.find().skip(2).limit(3)
+
+9.Find employees whose name is in ["Raj","Priya","Riya","Amit"].
+ans- db.employees.find({name:{$in:["Raj","Priya","Riya","Amit"]}})
+
+10.Find employees whose department is Developer or Tester and age less than 28.
+ans- db.employees.find({$and:[{$or:[{department:"Developer"},{department:"Tester"}]},{age:{$lt:28}}]})
+
+
