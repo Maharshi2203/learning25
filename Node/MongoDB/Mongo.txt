@@ -126,19 +126,6 @@ db.users.updateMany({all recordss..},{$set:{isActive:true}})
 
 db.users.updateMany({},{$set:{isActive:true}})
 
-
-update user set name = ?, age = ? where id = ?;
-
-db.users.updateOne({ condition }, { $set: {} });
-
-db.users.updateOne({ name: "raj" }, { $set: { age: 24, status: false } });
-
-db.users.updateOne({ name: "priya" }, { $set: { status: false, age: 23 } });
-
-db.users.updateMany({ name: "vishwa" }, { $set: { age: 24 } });
-
-db.users.updateMany({}, { $set: { isActive: true } });
-
 db.users.updateMany({}, { $unset: { isActive: "" } });
 
 db.users.updateMany({}, { $inc: { age: 1 } });
@@ -148,6 +135,15 @@ db.users.updateMany({ age: { $gt: 24 } }, { $set: { salary: 15000 } });
 db.users.updateMany({}, { $mul: { salary: 2 } });
 
 db.users.updateMany({}, { $rename: { city: "usercity" } });
+
+
+db.users.updateMany({}, { $rename: { city: "userCity" } })
+
+db.users.updateOne({ name: "arjun" }, { $push: { hobbies: "archery" } })
+db.users.updateOne({ name: "arjun" }, { $addToSet: { hobbies: "archery" } })
+db.users.updateOne({ name: "ajay" }, { $pull: { hobbies: "reading" } })
+db.users.updateOne({ name: "arjun" }, { $pop: { hobbies: 1 } })   
+db.users.updateOne({ name: "arjun" }, { $pop: { hobbies: -1 } })  
 
 
 
