@@ -146,4 +146,14 @@ db.users.updateOne({ name: "arjun" }, { $pop: { hobbies: 1 } })
 db.users.updateOne({ name: "arjun" }, { $pop: { hobbies: -1 } })  
 
 
+Session 4:
+$each:
 
+db.users.updateMany({name:"Maharshi"},{$push:{hobbies:"pqr"}})
+db.users.updateMany({name:"Maharshi"},{$push:{hobbies:"pqr"}})
+db.users.updateMany({name:"Maharshi"},{$set:{salaries:[]}})
+
+db.users.updateMany({name:"Maharshi"},{$push:{salaries:{$each:[25000,23000,30000],$sort:-1}}})
+
+update all array elements
+db.users.updateMany({name:"Maharshi"},{$inc:{"salaries.$[]":5000}})
