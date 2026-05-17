@@ -162,3 +162,215 @@ db.users.updateMany({},{$set:{department:{name:"Development"}}})
 db.users.updateMany({name:"Maharshi"},{$set:{"department.name":"HR"}})
 
 db.users.updateMany({name:"priya"},{$unset:{"department.name":""}})
+
+
+Test:
+db.createCollection("books")
+db.books.insertMany([
+{
+title:"Atomic Habits",
+author:"James Clear",
+price:499,
+category:"Self Help",
+stock:30,
+rating:4.8,
+publishedYear:2018,
+language:"English",
+available:true,
+tags:["motivation","habits","productivity"]
+},
+{
+title:"Rich Dad Poor Dad",
+author:"Robert Kiyosaki",
+price:399,
+category:"Finance",
+stock:15,
+rating:4.7,
+publishedYear:2000,
+language:"English",
+available:true,
+tags:["money","finance","business"] },
+{
+title:"The Alchemist",
+author:"Paulo Coelho",
+price:299,
+category:"Novel",
+stock:10,
+rating:4.5,
+publishedYear:1993,
+language:"English",
+available:false,
+tags:["dream","journey","philosophy"]
+},
+{
+title:"Ikigai",
+author:"Hector Garcia",
+price:350,
+category:"Self Help",
+stock:22,
+rating:4.6,
+publishedYear:2017,
+language:"English",
+available:true,
+tags:["life","japan","motivation"]
+},
+{
+title:"Wings of Fire",
+author:"APJ Abdul Kalam",
+price:280,
+category:"Biography",
+stock:18,
+rating:4.9,
+publishedYear:1999,
+language:"English",
+available:true,
+tags:["india","success","inspiration"]
+},
+{
+title:"Harry Potter",
+author:"J K Rowling",
+price:650,
+category:"Fantasy",
+stock:8,
+rating:4.9,
+publishedYear:2005,
+language:"English",
+available:true,
+tags:["magic","wizard","fantasy"] },
+{
+title:"Think and Grow Rich",
+author:"Napoleon Hill",
+price:420,
+category:"Finance",
+stock:12,
+rating:4.4,
+publishedYear:1937,
+language:"English",
+available:false,
+tags:["wealth","mindset","money"]
+},
+{
+title:"Do Epic Shit",
+author:"Ankur Warikoo",
+price:320,
+category:"Self Help",
+stock:25,
+rating:4.3,
+publishedYear:2021,
+language:"Hindi",
+available:true,
+tags:["startup","motivation","career"]
+},
+{
+title:"Zero To One",
+author:"Peter Thiel",
+price:550,
+category:"Business",
+stock:9,
+rating:4.5,
+publishedYear:2014,
+language:"English",
+available:true,
+tags:["startup","business","innovation"]
+},
+{
+title:"Deep Work",
+author:"Cal Newport",
+price:480,
+category:"Productivity",
+stock:14,
+rating:4.7,
+publishedYear:2016,
+language:"English",
+available:true,
+tags:["focus","productivity","career"] }
+])
+
+1.Find all books whose price is greater than 500.
+ans- db.books.find({price:{$gt:500}})
+
+2.Find books whose rating is greater than or equal to 4.5.
+ans- db.books.find({rating:{$gte:4.5}})
+
+3.Find all unavailable books.
+ans-db.books.find({available:false})
+
+4.Find books whose category is "Finance".
+ans- db.books.find({category:"Finance"})
+
+5.Find books whose stock is less than 15.
+ans- db.books.find({stock:{$lt:15}})8.
+
+6.Find books published after 2015.
+ans- db.books.find({publishedYear:{$gt:2015}})
+
+7.Find books whose price is between 300 and 600.
+ans- db.books.find({ price:{$gt:300,$lt:600}})
+
+8.Find books whose category is "Self Help" and rating is greater than 4.5.
+ans- db.books.find({$and:[{category:"Self Help"},{rating:{$gt:4.5}}]})
+
+9.Find books whose language is English.
+ans- db.books.find({language:"English"})
+
+10.Find books whose category is either "Business" or "Finance".
+ans- db.books.find({$or:[{category:"Business"},{category:"Finance"}]})
+
+11.Sort all books by price in ascending order.
+ans- db.books.find().sort({price:1})
+
+12.Sort all books by rating in descending order.
+ans- db.books.find().sort({rating:-1})
+
+13.Display only first 5 books.
+ans-db.books.find().limit(5)
+
+14.Skip first 2 books and display next 4 books.
+ans-db.books.find().skip(2).limit(4)	
+
+15.Find books whose category is not "Novel".
+ans- db.books.find({category:{$ne:"Novel"}})
+
+16.Find books whose title is in ["Atomic Habits","Ikigai","Deep Work"].
+ans- db.books.find({title:{$in:["Atomic Habits","Ikigai","Deep Work"]}})
+
+17.Find books whose stock is greater than 10 and available is true.
+ans- db.books.find({$and:[{stock:{$gt:10}},{available:"true"}]})
+
+18.Find books whose publishedYear is between 2000 and 2020.
+ans- db.books.find({$and:[{publishedYear:{$gt:2000}},{publishedYear:{$lt:2020}}]})
+
+19.Find books whose category is "Fantasy" or stock is less than 10.
+ans- db.books.find({$or:[{category:"Fantasy"},{stock:{ $lt: 10 }}]})
+
+20.Increase stock by 5 for all books.
+ans- db.books.updateMany({},{$inc:{stock:5}})
+
+21.Change language of "Do Epic Shit" to English.
+ans- db.books.updateMany({title:"Do Epic Shit"},{$set:{language:"English"}})
+
+22.Add a new field named discount with value 15 to all books.
+ans-db.books.updateMany({},{$set:{discount:15}})
+
+23.Remove the discount field from all books.
+ans- db.books.updateMany({},{$unset:{discount:""}})
+
+24.Multiply all book prices by 2.
+ans-db.books.updateMany({},{$mul:{price:2}})
+
+25.Rename field publishedYear to year.
+ans- db.books.updateMany({},{$rename:{publishedYear:"year"}})
+ 
+26.Add "adventure" tag to Harry Potter book.
+ans-db.books.updateMany({title:"Harry Potter"},{$push:{tags:"adventure"}})
+
+27.Remove "money" tag from Rich Dad Poor Dad book.
+ans-db.books.updateMany({title:"Rich Dad Poor Dad"},{$pull:{tags:"money"}})
+
+28.Delete all books whose stock is less than 10.
+ans-db.books.deleteMany({stock:{$lt:10}})
+
+29.Add an array field named reviews to all books.
+ans-db.books.updateMany({},{$set:{reviews:[]}})
+
+30.Increase all array salary values by 1000 for a specific book document.
