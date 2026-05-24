@@ -461,3 +461,12 @@ db.students.aggregate([{$project:{fullInfo:{$concat:["$name"," ","$city"]}}}])
 #condition
 db.students.aggregate([{$project:{name:1,result:{$cond:{if:{$lte:["marks",70]},then:"pass",else:"not"}}}}])
 db.students.aggregate([{$project:{name:1,result:{$cond:{if:{$gte:["marks",70]},then:"pass",else:"not"}}}}])
+
+$ifNull
+db.students.aggregate([{$project:{name:1,age:1,salary:{$ifNull:["$salary","No Salary"]},city:1,state:1,pin:1,_id:0}}])
+
+Q:update sahdev city and state to Mumbai and mahrashtra
+print info of mah employee having city state pin and with name age salary, if salary is not null
+
+db.students.updateOne({name:"Sahdev"},{$set:{city:"Mumbai",state:"Maharashtra"}})
+db.students.aggregate([{$project:{name:1,age:1,salary:{$ifNull:["$salary","No Salary"]},city:1,state:1,pin:{$toString:"$pin"},_id:0}}])
