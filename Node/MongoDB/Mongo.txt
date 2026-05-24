@@ -374,3 +374,79 @@ ans-db.books.deleteMany({stock:{$lt:10}})
 ans-db.books.updateMany({},{$set:{reviews:[]}})
 
 30.Increase all array salary values by 1000 for a specific book document.
+
+
+#AGGREGATE PIPELINES
+
+$match $group
+db.employees.aggregate([{$match:{gender:"male"}},{$group:{_id:"$department.name"}}])
+db.employees.aggregate([{$match:{gender:"male"}},{$group:{_id:"$department.name",totalSal:{$sum:"$salary"}}}])
+
+db.students.insertMany([
+{
+  name: "Saaj",
+  age: 24,
+  marks: 85,
+  city: "Ahmedabad",
+  skills: ["React", "Node", "MongoDB"],
+  address: {
+    state: "Gujarat",
+    pincode: 380001
+  },
+  salary: 50000,
+  joiningDate: new Date("2024-01-15")
+},
+{
+  name: "Raj",
+  age: 20,
+  marks: 65,
+  city: "Surat",
+  skills: ["Java"],
+  address: {
+    state: "Gujarat",
+    pincode: 395001
+  },
+  salary: 30000,
+  joiningDate: new Date("2023-06-10")
+},
+{
+  name: "Sahdev",
+  age: 24,
+  marks: 85,
+  city: "Ahmedabad",
+  skills: ["React"],
+  address: {
+    state: "Gujarat",
+    pincode: 380001
+  },
+  salary: 70000,
+  joiningDate: new Date("2024-01-15")
+},
+
+])
+
+$project
+studentname,age
+
+#field include
+db.students.aggregate([{$project:{name:1,age:1}}])
+db.students.aggregate([{$project:{name:1,age:1,_id:0}}])
+
+#exclude
+db.students.aggregate([{$project:{name:0}}])
+
+$rename
+db.students.aggregate([{$project:{studentName:"$name"}}])
+
+db.students.aggregate([{$project:{salary:1,bonus:5000}}]) :- doubt
+
+
+Arithmetic op:
+db.students.aggregate([{$project:{name:1,totalSal:{$add:["$salary",100]}}}])
+db.students.aggregate([{$project:{name:1,totalSal:{$multiply:["$salary",2]}}}])
+
+#add
+$multiply
+$subtract
+$divide
+$mod
