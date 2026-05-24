@@ -450,3 +450,14 @@ $multiply
 $subtract
 $divide
 $mod
+
+
+#string 
+db.students.aggregate([{$project:{upperName:{$toUpper:"$name"}}}])
+db.students.aggregate([{$project:{lowerName:{$toLower:"$name"}}}])
+db.students.aggregate([{$project:{fullInfo:{$concat:["$name"," ","$city"]}}}])
+
+
+#condition
+db.students.aggregate([{$project:{name:1,result:{$cond:{if:{$lte:["marks",70]},then:"pass",else:"not"}}}}])
+db.students.aggregate([{$project:{name:1,result:{$cond:{if:{$gte:["marks",70]},then:"pass",else:"not"}}}}])
