@@ -470,3 +470,111 @@ print info of mah employee having city state pin and with name age salary, if sa
 
 db.students.updateOne({name:"Sahdev"},{$set:{city:"Mumbai",state:"Maharashtra"}})
 db.students.aggregate([{$project:{name:1,age:1,salary:{$ifNull:["$salary","No Salary"]},city:1,state:1,pin:{$toString:"$pin"},_id:0}}])
+
+
+
+$lookup
+db.departments.insertMany([
+{
+  _id: 1,
+  deptName: "Engineering",
+  location: "Ahmedabad"
+},
+{
+  _id: 2,
+  deptName: "HR",
+  location: "Surat"
+},
+{
+  _id: 3,
+  deptName: "Finance",
+  location: "Vadodara"
+}
+])
+
+db.employees1.insertMany([
+{
+  _id: 101,
+  name: "Sam",
+  age: 24,
+  salary: 50000,
+  deptId: 1
+},
+{
+  _id: 102,
+  name: "Raj",
+  age: 22,
+  salary: 40000,
+  deptId: 1
+},
+{
+  _id: 103,
+  name: "Priya",
+  age: 28,
+  salary: 55000,
+  deptId: 2
+},
+{
+  _id: 104,
+  name: "Amit",
+  age: 30,
+  salary: 60000,
+  deptId: 3
+},
+{
+  _id: 105,
+  name: "Neha",
+  age: 26,
+  salary: 45000,
+  deptId: 2
+},
+{
+  _id: 106,
+  name: "Vikas",
+  age: 32,
+  salary: 70000,
+  deptId: 1
+},
+{
+  _id: 107,
+  name: "Riya",
+  age: 25,
+  salary: 48000,
+  deptId: 3
+},
+{
+  _id: 108,
+  name: "Karan",
+  age: 29,
+  salary: 65000,
+  deptId: 1
+},
+{
+  _id: 109,
+  name: "Pooja",
+  age: 27,
+  salary: 52000,
+  deptId: 2
+},
+{
+  _id: 110,
+  name: "Arjun",
+  age: 31,
+  salary: 75000,
+  deptId: 3
+}
+])
+
+
+
+{
+	$lookup:{
+	from:"employees1",
+	localfiled:"_id",
+	foreignFiled:"deptId",
+        as:"empInfo"
+			
+	}
+}
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}}])
