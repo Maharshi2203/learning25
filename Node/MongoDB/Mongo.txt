@@ -593,3 +593,7 @@ db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreig
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$group:{_id:"$dept.deptName",totalemps:{$sum:1}}}])
 
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$group:{_id:"$dept.deptName",totalSalary:{$sum:"$salary"}}}])
+
+
+#Department wise employee name
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$city"},{$group:{_id:"$dept.deptName",employees:{$push:"$name"}}}])
