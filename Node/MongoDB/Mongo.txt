@@ -578,3 +578,18 @@ db.employees1.insertMany([
 }
 
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}}])
+
+
+$unwind
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"}])
+
+$lookup+$unwind+$project
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$project:{_id:0,name:1,deptName:"$dept.departmentName"}}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$match:{"dept.deptName":"Engineering"}}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$group:{_id:"$dept.deptName",totalemps:{$sum:1}}}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$group:{_id:"$dept.deptName",totalSalary:{$sum:"$salary"}}}])
