@@ -473,7 +473,7 @@ db.students.aggregate([{$project:{name:1,age:1,salary:{$ifNull:["$salary","No Sa
 
 
 
-$lookup
+--> $lookup
 db.departments.insertMany([
 {
   _id: 1,
@@ -580,10 +580,10 @@ db.employees1.insertMany([
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}}])
 
 
-$unwind
+--> $unwind
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"}])
 
-$lookup+$unwind+$project
+--> $lookup+$unwind+$project
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"}])
 
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$project:{_id:0,name:1,deptName:"$dept.departmentName"}}])
@@ -595,5 +595,104 @@ db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreig
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$group:{_id:"$dept.deptName",totalSalary:{$sum:"$salary"}}}])
 
 
-#Department wise employee name
+--> Department wise employee name
 db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$city"},{$group:{_id:"$dept.deptName",employees:{$push:"$name"}}}])
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+D-31-5-2026
+
+db.users1.insertMany([
+{
+  _id: 1,
+  name: "Samir",
+  email: "samir@gmail.com",
+  city: "Ahmedabad"
+},
+{
+  _id: 2,
+  name: "Raj",
+  email: "raj@gmail.com",
+  city: "Surat"
+},
+{
+  _id: 3,
+  name: "Priya",
+  email: "priya@gmail.com",
+  city: "Vadodara"
+},
+{
+  _id: 4,
+  name: "Amit",
+  email: "amit@gmail.com",
+  city: "Ahmedabad"
+},
+{
+  _id: 5,
+  name: "Neha",
+  email: "neha@gmail.com",
+  city: "Rajkot"
+}
+])
+
+db.orders.insertMany([
+{
+  _id: 101,
+  userId: 1,
+  product: "Laptop",
+  amount: 50000,
+  status: "Delivered"
+},
+{
+  _id: 102,
+  userId: 1,
+  product: "Mouse",
+  amount: 1000,
+  status: "Delivered"
+},
+{
+  _id: 103,
+  userId: 1,
+  product: "Keyboard",
+  amount: 2000,
+  status: "Pending"
+},
+{
+  _id: 104,
+  userId: 2,
+  product: "Monitor",
+  amount: 12000,
+  status: "Delivered"
+},
+{
+  _id: 105,
+  userId: 2,
+  product: "Webcam",
+  amount: 3000,
+  status: "Pending"
+},
+{
+  _id: 106,
+  userId: 3,
+  product: "Headphones",
+  amount: 4000,
+  status: "Delivered"
+},
+{
+  _id: 107,
+  userId: 4,
+  product: "Tablet",
+  amount: 25000,
+  status: "Delivered"
+}
+])
+
+
+ db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}}])
+
+ db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{_id:0,name:1,orders:1}}])
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,totalOrders:{$size:"$orders"}}}])
+
+==>find users who have orders 
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$match:{"orders.2":{$exists:true}}}])
