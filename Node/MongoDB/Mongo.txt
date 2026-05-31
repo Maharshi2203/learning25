@@ -694,5 +694,49 @@ db.orders.insertMany([
 
 db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,totalOrders:{$size:"$orders"}}}])
 
-==>find users who have orders 
+==>Find users who have orders 
 db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$match:{"orders.2":{$exists:true}}}])
+
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,highestOrder:{$max:"$orders.amount"}}}])
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,totalAmount:{$sum:"$orders.amount"}}}])
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,totalAmount:{$avg:"$orders.amount"}}}])
+
+==>Pipeline lookup
+db.users1.aggregate([{$lookup:{from:"orders",let:{userId:"$_id"},pipeline:[{$match:{$expr:{$and:[{$eq:["$userId","$$userId"]},{$eq:["$status","Delivered"]}]}}}],as:"deliveredOrders"}}])
+
+==> task
+db.students1.insertMany([
+{ _id: 1, name: "Samir", courseId: 101, age: 24 },
+{ _id: 2, name: "Raj", courseId: 102, age: 22 },
+{ _id: 3, name: "Priya", courseId: 101, age: 23 },
+{ _id: 4, name: "Amit", courseId: 103, age: 25 },
+{ _id: 5, name: "Neha", courseId: 102, age: 21 },
+{ _id: 6, name: "Karan", courseId: 104, age: 26 }
+])
+
+
+db.courses.insertMany([
+{ _id: 101, courseName: "React", fees: 15000 },
+{ _id: 102, courseName: "NodeJS", fees: 12000 },
+{ _id: 103, courseName: "MongoDB", fees: 10000 }
+])
+
+
+1.Show all students with their course details.
+ans- db.students1.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}}])
+
+2.Show student name and course name only.
+ans-db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$project:{_id:0,name:1,courseName:"$course.courseName"}}])
+
+3.Find students whose course fee is greater than 12000.
+ans-db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$match:{"course.fee":{$gt:12000}}}])
+
+4.Count number of students in each course.
+ans- db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$group:{_id:"$course.courseName",totalStudents:{$sum:1}}}])
+
+5.Find students whose course does not exist.
+ans- db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$match:{course:{$eq:[]}}}])
+
