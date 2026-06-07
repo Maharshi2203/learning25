@@ -735,7 +735,7 @@ ans-db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreig
 ans-db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$match:{"course.fee":{$gt:12000}}}])
 
 4.Count number of students in each course.
-ans- db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$group:{_id:"$course.courseName",totalStudents:{$sum:1}}}])
+ans- db.students.aggregate([{$lookup:{from:"courses",l  ocalField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$group:{_id:"$course.courseName",totalStudents:{$sum:1}}}])
 
 5.Find students whose course does not exist.
 ans- db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$match:{course:{$eq:[]}}}])
