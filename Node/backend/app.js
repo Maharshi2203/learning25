@@ -1,5 +1,5 @@
-const express = require("express"); 
-const app = express(); 
+const express = require("express");
+const app = express();
 
 
 app.get("/test", (req, res) => {
@@ -16,17 +16,17 @@ const user = {
 const users = [
   {
     id: 1,
-    name: "amit",
+    name: "maharshi",
     age: 23,
   },
   {
     id: 2,
-    name: "amita",
+    name: "jenish",
     age: 24,
   },
   {
     id: 3,
-    name: "jay",
+    name: "shrey",
     age: 25,
   },
 ];
@@ -40,44 +40,45 @@ app.get("/user", (req, res) => {
   });
 });
 
-app.get("/users",(req,res)=>{
-    res.json({
-        message:"user fetch successfully !!",
-        data:users
-    })
+app.get("/users", (req, res) => {
+  res.json({
+    message: "user fetch successfully !!",
+    data: users
+  })
 })
 
-app.get("/users1",(req,res)=>{
+app.get("/users1", (req, res) => {
 
   res.write(JSON.stringify(user))
   res.send()
 })
 
-app.get("/users2",(req,res)=>{
-  res.set("content-type","text/html")
+app.get("/users2", (req, res) => {
+  res.set("content-type", "text/html")
   res.write(`<h1>Hello</h1>`)
   res.send()
 })
 
 
-app.get("/usertable",(req,res)=>{
+app.get("/usertable", (req, res) => {
 
-  res.set("content-type","text/html")
+  res.set("content-type", "text/html")
   res.write(`<center><table cellspacing='5px' cellpadding='10px' border='1px' solid>
     <tr>
     <th>ID</th>
     <th>NAME</th>
     <th>AGE</th>
     </tr>`)
-    for(i of users){
-      res.write(`<tr><td>${i.id}</td>`)
-      res.write(`<td>${i.name}</td>`)
-      res.write(`<td>${i.age}</td></tr>`)
-    }
-    res.write(`</table></center>`)
-    res.send()
+  for (i of users) {
+    res.write(`<tr><td>${i.id}</td>`)
+    res.write(`<td>${i.name}</td>`)
+    res.write(`<td>${i.age}</td></tr>`)
+  }
+  res.write(`</table></center>`)
+  res.send()
 
 })
+
 
 
 const PORT = 3000;
