@@ -1,5 +1,5 @@
-const express = require("express"); 
-const app = express(); 
+const express = require("express");
+const app = express();
 
 
 app.get("/test", (req, res) => {
@@ -40,42 +40,42 @@ app.get("/user", (req, res) => {
   });
 });
 
-app.get("/users",(req,res)=>{
-    res.json({
-        message:"user fetch successfully !!",
-        data:users
-    })
+app.get("/users", (req, res) => {
+  res.json({
+    message: "user fetch successfully !!",
+    data: users
+  })
 })
 
-app.get("/users1",(req,res)=>{
+app.get("/users1", (req, res) => {
 
   res.write(JSON.stringify(user))
   res.send()
 })
 
-app.get("/users2",(req,res)=>{
-  res.set("content-type","text/html")
+app.get("/users2", (req, res) => {
+  res.set("content-type", "text/html")
   res.write(`<h1>Hello</h1>`)
   res.send()
 })
 
 
-app.get("/usertable",(req,res)=>{
+app.get("/usertable", (req, res) => {
 
-  res.set("content-type","text/html")
+  res.set("content-type", "text/html")
   res.write(`<center><table cellspacing='5px' cellpadding='10px' border='1px' solid>
     <tr>
     <th>ID</th>
     <th>NAME</th>
     <th>AGE</th>
     </tr>`)
-    for(i of users){
-      res.write(`<tr><td>${i.id}</td>`)
-      res.write(`<td>${i.name}</td>`)
-      res.write(`<td>${i.age}</td></tr>`)
-    }
-    res.write(`</table></center>`)
-    res.send()
+  for (i of users) {
+    res.write(`<tr><td>${i.id}</td>`)
+    res.write(`<td>${i.name}</td>`)
+    res.write(`<td>${i.age}</td></tr>`)
+  }
+  res.write(`</table></center>`)
+  res.send()
 
 })
 app.get("/getuserbyid/:id", (req, res) => {
@@ -91,16 +91,16 @@ app.get("/getuserbyid/:id", (req, res) => {
       data: foundUser,
     });
   }
-  else{
+  else {
     res.json({
       message: "user not found",
-      
+
     });
   }
 
 });
 //task
-var students =[
+var students = [
   {
     "id": 101,
     "name": "Amit Sharma",
@@ -133,24 +133,30 @@ var students =[
   }
 ]
 
-app.get("/studentsbymarks",(req,res)=>{
-    app.get("/students/:marks", (req, res) => {
+app.get("/studentsbymarks", (req, res) => {
+  app.get("/students/:marks", (req, res) => {
     const marks = req.params.marks;
 
     const filteredStudents = students.filter(
-        (student) => student.marks > marks
+      (student) => student.marks > marks
     );
     res.json(filteredStudents);
-});
+  });
 })
 
 app.get("/studenfromcollage/:studentname/:collagename", (req, res) => {
   const studentname = req.params.studentname;
   const collegename = req.params.collagename;
-  
-  res.send(`${studentname} from ${collagename}`);
+
+  res.send(`${studentname} from ${collegename}`);
 });
 
+app.get("/searchstudent",(req,res)=>{
+    console.log("query",res.query)
+    res.json({
+        message:"search student by query"
+    })
+})
 
 
 const PORT = 3000;
