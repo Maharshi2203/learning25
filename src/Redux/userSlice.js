@@ -6,11 +6,6 @@ export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
   return response.data.data;
 });
 
-export const addUser = createAsyncThunk("user/addUser", async (userData) => {
-  const response = await axios.post("https://node5.onrender.com/user/user/", userData);
-  return response.data.data;
-});
-
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -29,17 +24,6 @@ const userSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
-      })
-      .addCase(addUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(addUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.users.push(action.payload);
-      })
-      .addCase(addUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });

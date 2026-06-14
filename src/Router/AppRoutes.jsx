@@ -15,6 +15,9 @@ import { StudyBook } from "../Components/StudyBook";
 
 import { Login } from "../Components/Login";
 import { ErrorComponent } from "../Components/ErrorComponent";
+import { TailwindDemo1 } from "../Components/TailwindDemo1";
+import { TailwindDemo2 } from "../Components/TailwindDemo2";
+import { TaiwindDashboard } from "../Components/TaiwindDashboard";
 
 
 
@@ -72,10 +75,30 @@ const router = createBrowserRouter([
         path: "productcomponent",
         element: <ProductComponent />,
       },
+      {
+        path: "user/taiwinddemo1",
+        element: <TailwindDemo1 />,
+      },
 
       {
         path: "study/:id",
         element: <StudyBook />,
+      },
+      {
+        path:"user/tailwinddemo2",
+        element:<TailwindDemo2></TailwindDemo2>
+      },
+      {
+        path:"user/taiwinddemo2",
+        element:<TailwindDemo2></TailwindDemo2>
+      },
+      {
+        path:"taiwinddashboard",
+        element:<TaiwindDashboard/>
+      },
+      {
+        path:"/user/tailwinddasboard",
+        element:<TaiwindDashboard/>
       },
 
     ],

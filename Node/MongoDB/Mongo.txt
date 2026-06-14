@@ -1,0 +1,742 @@
+===> MONGO DB
+
+cmd --> mongosh
+
+to check db list
+cmd: show dbs
+
+
+db create:
+use weekendmern2
+
+NOte: until you have 1 collection(table) in db it wont show in list
+
+
+check tables:
+show collections
+
+
+how to create collection(table)
+
+SQL: create table employee(id int pk...,name varchar(30));
+NOSQL : db.createCollection("users")
+
+
+To Insert data : db.users.insertOne({name:"Raj",age:23,status:true})
+To display/find that data :  db.users.find()
+to display multiple data : db.user.insertMany({},{},{})
+
+db.users.insertMany([{name:"priya",age:24,gender:"female"},{name:"krishna",age:22,gender:"female"},{name:"arjun",age:25,gender:"male"}])
+
+
+db.users.find({name:"Maharshi"})
+db.users.find({name:"Maharshi",age:20})
+
+
+#operators
+and- db.users.find({$and:[{name:"Maharshi"},{age:20}]})
+or- db.usres.find({$or:[{name:"Maharshi"},{age:22}]})
+$gt-db.users.find({age:{$gt:20}})
+$gte-db.users.find({age:{$gte:22}})
+$lt -db.users.find({age:{$lt:22}})
+$lte- db.users.find({age:{$lte:22}})
+$eq - db.users.find({age:{$eq:23}})
+$ne - db.users.find({age:{$ne:23}})
+$in - db.users.find({name:{$in:["Maharshi","raj","ram"]}})
+$nin - db.users.find({name:{$nin:["Maharshi","raj","ram"]}})
+
+==> limit,skip and sort
+limit()- db.users.find().limit(1)
+skip() - db.users.find().skip(2)
+
+
+nested conditions:
+db.users.find().skip(2).limit(1)
+
+sort() - db.users.find().sort({name:1}) #ASC
+db.users.find().sort({name: -1}) #dSC
+
+
+# Practice 
+
+db.createCollection("employees")
+
+db.employees.insertMany([
+  {name:"Amit",age:24,department:"HR",salary:30000,city:"Ahmedabad",status:true},
+  {name:"Raj",age:28,department:"Developer",salary:55000,city:"Surat",status:true},
+  {name:"Neha",age:26,department:"HR",salary:35000,city:"Mumbai",status:false},
+  {name:"Kunal",age:30,department:"Manager",salary:75000,city:"Pune",status:true},
+  {name:"Priya",age:22,department:"Developer",salary:40000,city:"Ahmedabad",status:true},
+  {name:"Arjun",age:27,department:"Tester",salary:32000,city:"Delhi",status:false},
+  {name:"Krishna",age:25,department:"Developer",salary:60000,city:"Ahmedabad",status:true},
+  {name:"Sneha",age:29,department:"Manager",salary:80000,city:"Mumbai",status:true},
+  {name:"Vikas",age:31,department:"Tester",salary:45000,city:"Surat",status:false},
+  {name:"Riya",age:23,department:"HR",salary:28000,city:"Pune",status:true}
+])
+
+1.Find all employees whose salary is greater than 40000.
+ans- db.employees.find({salary:{$gt:40000}})
+
+2.Find employees whose department is Developer and city is Ahmedabad.
+ans-db.employees.find({$and:[{department:"Developer"},{city:"Ahemdabad"}]})
+
+3.Find employees whose age is between 24 and 29.
+ans- db.employees.find({ age: { $gte: 24, $lte: 29 } })
+
+4.Find employees whose city is either Mumbai or Pune.
+ans - db.employees.find($or:[{city:"Mumbai"},{city:"pune"}])
+
+5.Find employees whose department is not HR.
+ans- db.employees.find({department:{$ne:HR}})
+
+6.Find employees whose status is true and salary greater than 50000.
+ans- db.employees.find({$or:[{status:true},{salary:{ $gt:50000}}]})
+
+7.Sort all employees by salary in descending order.
+ans- db.employees.find().sort({salary:1})
+
+8.Find first 3 employees after skipping 2 records.
+ans- db.employees.find().skip(2).limit(3)
+
+9.Find employees whose name is in ["Raj","Priya","Riya","Amit"].
+ans- db.employees.find({name:{$in:["Raj","Priya","Riya","Amit"]}})
+
+10.Find employees whose department is Developer or Tester and age less than 28.
+ans- db.employees.find({$and:[{$or:[{department:"Developer"},{department:"Tester"}]},{age:{$lt:28}}]})
+
+
+
+session 2:
+
+DELETE AND UPDATE:
+
+delete from user where name =?
+db.users.deleteOne({name:"kunal"})
+db.users.deleteMany({name:"shankar"})
+
+update:
+update user set name =? age =? where id= ?
+//db.users.updateOne({condition},{$set:{,,}})
+db.users.updateOne({name:"raj"},{$set:{age:24,status:false}})
+db.users.updateOne({name:"priya"},{$set:{status:false,age:23}})
+
+db.users.updateMany({name:"vishwa"},{$set:{age:24}})
+
+db.users.updateMany({all recordss..},{$set:{isActive:true}})
+
+db.users.updateMany({},{$set:{isActive:true}})
+
+db.users.updateMany({}, { $unset: { isActive: "" } });
+
+db.users.updateMany({}, { $inc: { age: 1 } });
+
+db.users.updateMany({ age: { $gt: 24 } }, { $set: { salary: 15000 } });
+
+db.users.updateMany({}, { $mul: { salary: 2 } });
+
+db.users.updateMany({}, { $rename: { city: "usercity" } });
+
+
+db.users.updateMany({}, { $rename: { city: "userCity" } })
+
+db.users.updateOne({ name: "arjun" }, { $push: { hobbies: "archery" } })
+db.users.updateOne({ name: "arjun" }, { $addToSet: { hobbies: "archery" } })
+db.users.updateOne({ name: "ajay" }, { $pull: { hobbies: "reading" } })
+db.users.updateOne({ name: "arjun" }, { $pop: { hobbies: 1 } })   
+db.users.updateOne({ name: "arjun" }, { $pop: { hobbies: -1 } })  
+
+
+Session 4:
+$each:
+
+db.users.updateMany({name:"Maharshi"},{$push:{hobbies:"pqr"}})
+db.users.updateMany({name:"Maharshi"},{$push:{hobbies:{$each:["Travel","Cricket","Basketball"]}}})
+db.users.updateMany({name:"Maharshi"},{$set:{salaries:[]}})
+
+db.users.updateMany({name:"Maharshi"},{$push:{salaries:{$each:[25000,23000,30000],$sort:-1}}})
+
+update all array elements
+db.users.updateMany({name:"Maharshi"},{$inc:{"salaries.$[]":5000}})
+
+db.users.updateMany({},{$set:{department:{name:"Development"}}})
+db.users.updateMany({name:"Maharshi"},{$set:{"department.name":"HR"}})
+
+db.users.updateMany({name:"priya"},{$unset:{"department.name":""}})
+
+
+Test:
+db.createCollection("books")
+db.books.insertMany([
+{
+title:"Atomic Habits",
+author:"James Clear",
+price:499,
+category:"Self Help",
+stock:30,
+rating:4.8,
+publishedYear:2018,
+language:"English",
+available:true,
+tags:["motivation","habits","productivity"]
+},
+{
+title:"Rich Dad Poor Dad",
+author:"Robert Kiyosaki",
+price:399,
+category:"Finance",
+stock:15,
+rating:4.7,
+publishedYear:2000,
+language:"English",
+available:true,
+tags:["money","finance","business"] },
+{
+title:"The Alchemist",
+author:"Paulo Coelho",
+price:299,
+category:"Novel",
+stock:10,
+rating:4.5,
+publishedYear:1993,
+language:"English",
+available:false,
+tags:["dream","journey","philosophy"]
+},
+{
+title:"Ikigai",
+author:"Hector Garcia",
+price:350,
+category:"Self Help",
+stock:22,
+rating:4.6,
+publishedYear:2017,
+language:"English",
+available:true,
+tags:["life","japan","motivation"]
+},
+{
+title:"Wings of Fire",
+author:"APJ Abdul Kalam",
+price:280,
+category:"Biography",
+stock:18,
+rating:4.9,
+publishedYear:1999,
+language:"English",
+available:true,
+tags:["india","success","inspiration"]
+},
+{
+title:"Harry Potter",
+author:"J K Rowling",
+price:650,
+category:"Fantasy",
+stock:8,
+rating:4.9,
+publishedYear:2005,
+language:"English",
+available:true,
+tags:["magic","wizard","fantasy"] },
+{
+title:"Think and Grow Rich",
+author:"Napoleon Hill",
+price:420,
+category:"Finance",
+stock:12,
+rating:4.4,
+publishedYear:1937,
+language:"English",
+available:false,
+tags:["wealth","mindset","money"]
+},
+{
+title:"Do Epic Shit",
+author:"Ankur Warikoo",
+price:320,
+category:"Self Help",
+stock:25,
+rating:4.3,
+publishedYear:2021,
+language:"Hindi",
+available:true,
+tags:["startup","motivation","career"]
+},
+{
+title:"Zero To One",
+author:"Peter Thiel",
+price:550,
+category:"Business",
+stock:9,
+rating:4.5,
+publishedYear:2014,
+language:"English",
+available:true,
+tags:["startup","business","innovation"]
+},
+{
+title:"Deep Work",
+author:"Cal Newport",
+price:480,
+category:"Productivity",
+stock:14,
+rating:4.7,
+publishedYear:2016,
+language:"English",
+available:true,
+tags:["focus","productivity","career"] }
+])
+
+1.Find all books whose price is greater than 500.
+ans- db.books.find({price:{$gt:500}})
+
+2.Find books whose rating is greater than or equal to 4.5.
+ans- db.books.find({rating:{$gte:4.5}})
+
+3.Find all unavailable books.
+ans-db.books.find({available:false})
+
+4.Find books whose category is "Finance".
+ans- db.books.find({category:"Finance"})
+
+5.Find books whose stock is less than 15.
+ans- db.books.find({stock:{$lt:15}})8.
+
+6.Find books published after 2015.
+ans- db.books.find({publishedYear:{$gt:2015}})
+
+7.Find books whose price is between 300 and 600.
+ans- db.books.find({ price:{$gt:300,$lt:600}})
+
+8.Find books whose category is "Self Help" and rating is greater than 4.5.
+ans- db.books.find({$and:[{category:"Self Help"},{rating:{$gt:4.5}}]})
+
+9.Find books whose language is English.
+ans- db.books.find({language:"English"})
+
+10.Find books whose category is either "Business" or "Finance".
+ans- db.books.find({$or:[{category:"Business"},{category:"Finance"}]})
+
+11.Sort all books by price in ascending order.
+ans- db.books.find().sort({price:1})
+
+12.Sort all books by rating in descending order.
+ans- db.books.find().sort({rating:-1})
+
+13.Display only first 5 books.
+ans-db.books.find().limit(5)
+
+14.Skip first 2 books and display next 4 books.
+ans-db.books.find().skip(2).limit(4)	
+
+15.Find books whose category is not "Novel".
+ans- db.books.find({category:{$ne:"Novel"}})
+
+16.Find books whose title is in ["Atomic Habits","Ikigai","Deep Work"].
+ans- db.books.find({title:{$in:["Atomic Habits","Ikigai","Deep Work"]}})
+
+17.Find books whose stock is greater than 10 and available is true.
+ans- db.books.find({$and:[{stock:{$gt:10}},{available:"true"}]})
+
+18.Find books whose publishedYear is between 2000 and 2020.
+ans- db.books.find({$and:[{publishedYear:{$gt:2000}},{publishedYear:{$lt:2020}}]})
+
+19.Find books whose category is "Fantasy" or stock is less than 10.
+ans- db.books.find({$or:[{category:"Fantasy"},{stock:{ $lt: 10 }}]})
+
+20.Increase stock by 5 for all books.
+ans- db.books.updateMany({},{$inc:{stock:5}})
+
+21.Change language of "Do Epic Shit" to English.
+ans- db.books.updateMany({title:"Do Epic Shit"},{$set:{language:"English"}})
+
+22.Add a new field named discount with value 15 to all books.
+ans-db.books.updateMany({},{$set:{discount:15}})
+
+23.Remove the discount field from all books.
+ans- db.books.updateMany({},{$unset:{discount:""}})
+
+24.Multiply all book prices by 2.
+ans-db.books.updateMany({},{$mul:{price:2}})
+
+25.Rename field publishedYear to year.
+ans- db.books.updateMany({},{$rename:{publishedYear:"year"}})
+ 
+26.Add "adventure" tag to Harry Potter book.
+ans-db.books.updateMany({title:"Harry Potter"},{$push:{tags:"adventure"}})
+
+27.Remove "money" tag from Rich Dad Poor Dad book.
+ans-db.books.updateMany({title:"Rich Dad Poor Dad"},{$pull:{tags:"money"}})
+
+28.Delete all books whose stock is less than 10.
+ans-db.books.deleteMany({stock:{$lt:10}})
+
+29.Add an array field named reviews to all books.
+ans-db.books.updateMany({},{$set:{reviews:[]}})
+
+30.Increase all array salary values by 1000 for a specific book document.
+
+
+#AGGREGATE PIPELINES
+
+$match $group
+db.employees.aggregate([{$match:{gender:"male"}},{$group:{_id:"$department.name"}}])
+db.employees.aggregate([{$match:{gender:"male"}},{$group:{_id:"$department.name",totalSal:{$sum:"$salary"}}}])
+
+db.students.insertMany([
+{
+  name: "Saaj",
+  age: 24,
+  marks: 85,
+  city: "Ahmedabad",
+  skills: ["React", "Node", "MongoDB"],
+  address: {
+    state: "Gujarat",
+    pincode: 380001
+  },
+  salary: 50000,
+  joiningDate: new Date("2024-01-15")
+},
+{
+  name: "Raj",
+  age: 20,
+  marks: 65,
+  city: "Surat",
+  skills: ["Java"],
+  address: {
+    state: "Gujarat",
+    pincode: 395001
+  },
+  salary: 30000,
+  joiningDate: new Date("2023-06-10")
+},
+{
+  name: "Sahdev",
+  age: 24,
+  marks: 85,
+  city: "Ahmedabad",
+  skills: ["React"],
+  address: {
+    state: "Gujarat",
+    pincode: 380001
+  },
+  salary: 70000,
+  joiningDate: new Date("2024-01-15")
+},
+
+])
+
+$project
+studentname,age
+
+#field include
+db.students.aggregate([{$project:{name:1,age:1}}])
+db.students.aggregate([{$project:{name:1,age:1,_id:0}}])
+
+#exclude
+db.students.aggregate([{$project:{name:0}}])
+
+$rename
+db.students.aggregate([{$project:{studentName:"$name"}}])
+
+db.students.aggregate([{$project:{salary:1,bonus:5000}}]) :- doubt
+
+
+Arithmetic op:
+db.students.aggregate([{$project:{name:1,totalSal:{$add:["$salary",100]}}}])
+db.students.aggregate([{$project:{name:1,totalSal:{$multiply:["$salary",2]}}}])
+
+#add
+$multiply
+$subtract
+$divide
+$mod
+
+
+#string 
+db.students.aggregate([{$project:{upperName:{$toUpper:"$name"}}}])
+db.students.aggregate([{$project:{lowerName:{$toLower:"$name"}}}])
+db.students.aggregate([{$project:{fullInfo:{$concat:["$name"," ","$city"]}}}])
+
+
+#condition
+db.students.aggregate([{$project:{name:1,result:{$cond:{if:{$lte:["marks",70]},then:"pass",else:"not"}}}}])
+db.students.aggregate([{$project:{name:1,result:{$cond:{if:{$gte:["marks",70]},then:"pass",else:"not"}}}}])
+
+$ifNull
+db.students.aggregate([{$project:{name:1,age:1,salary:{$ifNull:["$salary","No Salary"]},city:1,state:1,pin:1,_id:0}}])
+
+Q:update sahdev city and state to Mumbai and mahrashtra
+print info of mah employee having city state pin and with name age salary, if salary is not null
+
+db.students.updateOne({name:"Sahdev"},{$set:{city:"Mumbai",state:"Maharashtra"}})
+db.students.aggregate([{$project:{name:1,age:1,salary:{$ifNull:["$salary","No Salary"]},city:1,state:1,pin:{$toString:"$pin"},_id:0}}])
+
+
+
+--> $lookup
+db.departments.insertMany([
+{
+  _id: 1,
+  deptName: "Engineering",
+  location: "Ahmedabad"
+},
+{
+  _id: 2,
+  deptName: "HR",
+  location: "Surat"
+},
+{
+  _id: 3,
+  deptName: "Finance",
+  location: "Vadodara"
+}
+])
+
+db.employees1.insertMany([
+{
+  _id: 101,
+  name: "Sam",
+  age: 24,
+  salary: 50000,
+  deptId: 1
+},
+{
+  _id: 102,
+  name: "Raj",
+  age: 22,
+  salary: 40000,
+  deptId: 1
+},
+{
+  _id: 103,
+  name: "Priya",
+  age: 28,
+  salary: 55000,
+  deptId: 2
+},
+{
+  _id: 104,
+  name: "Amit",
+  age: 30,
+  salary: 60000,
+  deptId: 3
+},
+{
+  _id: 105,
+  name: "Neha",
+  age: 26,
+  salary: 45000,
+  deptId: 2
+},
+{
+  _id: 106,
+  name: "Vikas",
+  age: 32,
+  salary: 70000,
+  deptId: 1
+},
+{
+  _id: 107,
+  name: "Riya",
+  age: 25,
+  salary: 48000,
+  deptId: 3
+},
+{
+  _id: 108,
+  name: "Karan",
+  age: 29,
+  salary: 65000,
+  deptId: 1
+},
+{
+  _id: 109,
+  name: "Pooja",
+  age: 27,
+  salary: 52000,
+  deptId: 2
+},
+{
+  _id: 110,
+  name: "Arjun",
+  age: 31,
+  salary: 75000,
+  deptId: 3
+}
+])
+
+
+
+{
+	$lookup:{
+	from:"employees1",
+	localfiled:"_id",
+	foreignFiled:"deptId",
+        as:"empInfo"
+			
+	}
+}
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}}])
+
+
+--> $unwind
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"}])
+
+--> $lookup+$unwind+$project
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$project:{_id:0,name:1,deptName:"$dept.departmentName"}}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$match:{"dept.deptName":"Engineering"}}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$group:{_id:"$dept.deptName",totalemps:{$sum:1}}}])
+
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$dept"},{$group:{_id:"$dept.deptName",totalSalary:{$sum:"$salary"}}}])
+
+
+--> Department wise employee name
+db.employees1.aggregate([{$lookup:{from:"departments",localField:"deptId",foreignField:"_id",as:"dept"}},{$unwind:"$city"},{$group:{_id:"$dept.deptName",employees:{$push:"$name"}}}])
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+D-31-5-2026
+
+db.users1.insertMany([
+{
+  _id: 1,
+  name: "Samir",
+  email: "samir@gmail.com",
+  city: "Ahmedabad"
+},
+{
+  _id: 2,
+  name: "Raj",
+  email: "raj@gmail.com",
+  city: "Surat"
+},
+{
+  _id: 3,
+  name: "Priya",
+  email: "priya@gmail.com",
+  city: "Vadodara"
+},
+{
+  _id: 4,
+  name: "Amit",
+  email: "amit@gmail.com",
+  city: "Ahmedabad"
+},
+{
+  _id: 5,
+  name: "Neha",
+  email: "neha@gmail.com",
+  city: "Rajkot"
+}
+])
+
+db.orders.insertMany([
+{
+  _id: 101,
+  userId: 1,
+  product: "Laptop",
+  amount: 50000,
+  status: "Delivered"
+},
+{
+  _id: 102,
+  userId: 1,
+  product: "Mouse",
+  amount: 1000,
+  status: "Delivered"
+},
+{
+  _id: 103,
+  userId: 1,
+  product: "Keyboard",
+  amount: 2000,
+  status: "Pending"
+},
+{
+  _id: 104,
+  userId: 2,
+  product: "Monitor",
+  amount: 12000,
+  status: "Delivered"
+},
+{
+  _id: 105,
+  userId: 2,
+  product: "Webcam",
+  amount: 3000,
+  status: "Pending"
+},
+{
+  _id: 106,
+  userId: 3,
+  product: "Headphones",
+  amount: 4000,
+  status: "Delivered"
+},
+{
+  _id: 107,
+  userId: 4,
+  product: "Tablet",
+  amount: 25000,
+  status: "Delivered"
+}
+])
+
+
+ db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}}])
+
+ db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{_id:0,name:1,orders:1}}])
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,totalOrders:{$size:"$orders"}}}])
+
+==>Find users who have orders 
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$match:{"orders.2":{$exists:true}}}])
+
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,highestOrder:{$max:"$orders.amount"}}}])
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,totalAmount:{$sum:"$orders.amount"}}}])
+
+db.users1.aggregate([{$lookup:{from:"orders",localField:"_id",foreignField:"userId",as:"orders"}},{$project:{name:1,_id:0,totalAmount:{$avg:"$orders.amount"}}}])
+
+==>Pipeline lookup
+db.users1.aggregate([{$lookup:{from:"orders",let:{userId:"$_id"},pipeline:[{$match:{$expr:{$and:[{$eq:["$userId","$$userId"]},{$eq:["$status","Delivered"]}]}}}],as:"deliveredOrders"}}])
+
+==> task
+db.students1.insertMany([
+{ _id: 1, name: "Samir", courseId: 101, age: 24 },
+{ _id: 2, name: "Raj", courseId: 102, age: 22 },
+{ _id: 3, name: "Priya", courseId: 101, age: 23 },
+{ _id: 4, name: "Amit", courseId: 103, age: 25 },
+{ _id: 5, name: "Neha", courseId: 102, age: 21 },
+{ _id: 6, name: "Karan", courseId: 104, age: 26 }
+])
+
+
+db.courses.insertMany([
+{ _id: 101, courseName: "React", fees: 15000 },
+{ _id: 102, courseName: "NodeJS", fees: 12000 },
+{ _id: 103, courseName: "MongoDB", fees: 10000 }
+])
+
+
+1.Show all students with their course details.
+ans- db.students1.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}}])
+
+2.Show student name and course name only.
+ans-db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$project:{_id:0,name:1,courseName:"$course.courseName"}}])
+
+3.Find students whose course fee is greater than 12000.
+ans-db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$match:{"course.fee":{$gt:12000}}}])
+
+4.Count number of students in each course.
+ans- db.students.aggregate([{$lookup:{from:"courses",l  ocalField:"courseId",foreignField:"_id",as:"course"}},{$unwind:"$course"},{$group:{_id:"$course.courseName",totalStudents:{$sum:1}}}])
+
+5.Find students whose course does not exist.
+ans- db.students.aggregate([{$lookup:{from:"courses",localField:"courseId",foreignField:"_id",as:"course"}},{$match:{course:{$eq:[]}}}])
+
